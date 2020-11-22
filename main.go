@@ -25,18 +25,14 @@ func checkDomain(d string, wg *sync.WaitGroup) {
 	validTLD, err := validateDomainTLD(d)
 
 	if err != nil {
-		color.New(color.BgHiRed, color.FgBlack).Print(" ")
-		fmt.Print(" ")
-		fmt.Println(d, "ERR", err.Error())
+		printColor(color.New(color.BgYellow), d, "ERR", err.Error())
 
 		wg.Done()
 		return
 	}
 
 	if !validTLD {
-		color.New(color.BgHiRed, color.FgBlack).Print(" ")
-		fmt.Print(" ")
-		fmt.Println(d, "INVALID TLD")
+		printColor(color.New(color.BgYellow), d, "INVALID TLD")
 
 		wg.Done()
 		return
@@ -45,20 +41,25 @@ func checkDomain(d string, wg *sync.WaitGroup) {
 	exist, err := domainExists(d)
 
 	if err != nil {
-		color.New(color.BgHiRed, color.FgBlack).Print(" ")
-		fmt.Print(" ")
-		fmt.Println(d, "ERR", err.Error())
+		printColor(color.New(color.BgYellow), "ERR", err.Error())
 	} else {
 		if exist {
-			color.New(color.BgRed, color.FgBlack).Print(" ")
-			fmt.Print(" ")
-			fmt.Println(d, "TAKEN")
+			printColor(color.New(color.BgRed), d, "TAKEN")
 		} else {
-			color.New(color.BgGreen, color.FgBlack).Print(" ")
-			fmt.Print(" ")
-			fmt.Println(d, "AVAIL")
+			printColor(color.New(color.BgGreen), d, "AVAIL")
 		}
 	}
 
 	wg.Done()
+}
+
+var stdoutMux = &sync.Mutex{}
+
+func printColor(c *color.Color, text ...interface{}) {
+	stdoutMux.Lock()
+	defer stdoutMux.Unlock()
+
+	c.Print(" ")
+	fmt.Print(" ")
+	fmt.Println(text...)
 }
