@@ -9,7 +9,7 @@ import (
 	"sync"
 )
 
-var domainTLDLocateRegex = regexp.MustCompile(`^.+\.(.+)$`)
+var domainTLDLocateRegex = regexp.MustCompile(`^(?:(?:[A-Za-z0-9][A-Za-z0-9-]{0,61}[A-Za-z0-9])|(?:[A-Za-z0-9]))\.(.{2,6})$`)
 
 var tlds []string
 var tldsMux = &sync.RWMutex{}
