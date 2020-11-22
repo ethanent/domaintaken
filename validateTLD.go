@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"net/http"
 	"regexp"
 	"strings"
@@ -52,14 +53,14 @@ func validateTLD(tld string) bool {
 	return false
 }
 
-func validateDomainTLD(d string) bool {
+func validateDomainTLD(d string) (bool, error) {
 	r := domainTLDLocateRegex.FindStringSubmatch(d)
 
 	if len(r) < 2 {
-		panic("invalid domain " + d)
+		return false, errors.New("invalid domain " + d)
 	}
 
 	tld := strings.ToLower(r[1])
 
-	return validateTLD(tld)
+	return validateTLD(tld), nil
 }

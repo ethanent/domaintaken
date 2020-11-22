@@ -22,7 +22,15 @@ func main() {
 }
 
 func checkDomain(d string, wg *sync.WaitGroup) {
-	if !validateDomainTLD(d) {
+	validTLD, err := validateDomainTLD(d)
+
+	if err != nil {
+		color.New(color.BgHiRed, color.FgBlack).Print(" ")
+		fmt.Print(" ")
+		fmt.Println(d, "ERR", err.Error())
+	}
+
+	if !validTLD {
 		color.New(color.BgHiRed, color.FgBlack).Print(" ")
 		fmt.Print(" ")
 		fmt.Println(d, "INVALID TLD")
@@ -36,7 +44,7 @@ func checkDomain(d string, wg *sync.WaitGroup) {
 	if err != nil {
 		color.New(color.BgHiRed, color.FgBlack).Print(" ")
 		fmt.Print(" ")
-		fmt.Println(d, "ERR", err)
+		fmt.Println(d, "ERR", err.Error())
 	} else {
 		if exist {
 			color.New(color.BgRed, color.FgBlack).Print(" ")
