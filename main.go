@@ -28,6 +28,9 @@ func checkDomain(d string, wg *sync.WaitGroup) {
 		color.New(color.BgHiRed, color.FgBlack).Print(" ")
 		fmt.Print(" ")
 		fmt.Println(d, "ERR", err.Error())
+
+		wg.Done()
+		return
 	}
 
 	if !validTLD {
