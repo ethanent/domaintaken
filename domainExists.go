@@ -6,12 +6,9 @@ import (
 )
 
 func domainExists(name string) (bool, error) {
-	cd := true
-
 	req := &DNSRequest{
 		Name: name,
 		Type: "NS",
-		CD:   &cd,
 	}
 
 	resp, err := PerformRequest(req)
@@ -26,6 +23,6 @@ func domainExists(name string) (bool, error) {
 	case 3:
 		return false, nil
 	default:
-		return nil, errors.New("unexpected DNS status " + strconv.Itoa(resp.Status))
+		return false, errors.New("unexpected DNS status " + strconv.Itoa(resp.Status))
 	}
 }
