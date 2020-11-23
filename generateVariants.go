@@ -7,6 +7,7 @@ import (
 
 var replaceRegexp = regexp.MustCompile(`\(([^,)]+)(?:,([^),]+))?\)`)
 var alphabet = []string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"}
+var digits = []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}
 
 func generateVariants(d string) []string {
 	dr := []rune(d)
@@ -22,6 +23,10 @@ func generateVariants(d string) []string {
 	switch submatch[1] {
 	case "alpha":
 		insertValues = append(insertValues, alphabet...)
+	case "num":
+		insertValues = append(insertValues, digits...)
+	case "alphanum":
+		insertValues = append(insertValues, append(alphabet, digits...)...)
 	case "tld":
 		ensureFetchedTLDs()
 

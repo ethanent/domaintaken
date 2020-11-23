@@ -7,7 +7,8 @@ import (
 	"sync"
 )
 
-var maxConcurrent = flag.Int("concurrent", 12, "Maximum number of concurrent DNS requests")
+var maxConcurrent = flag.Int("c", 30, "Maximum number of concurrent DNS requests")
+var silentUnavailableDomains = flag.Bool("s", false, "Do not display unavailable domains")
 
 func main() {
 	flag.Parse()
@@ -63,7 +64,9 @@ func checkDomain(d string, wg *sync.WaitGroup) {
 		printColor(color.New(color.BgYellow), d, "ERR", err.Error())
 	} else {
 		if exist {
-			printColor(color.New(color.BgRed), d, "TAKEN")
+			if !*silentUnavailableDomains {
+				printColor(color.New(color.BgRed), d, "TAKEN")
+			}
 		} else {
 			printColor(color.New(color.BgGreen), d, "AVAIL")
 		}
